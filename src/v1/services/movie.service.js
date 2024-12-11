@@ -102,6 +102,9 @@ class movieService {
 				await REDIS_DEL(key)
 			}
 
+			const cacheKey = `movie:${newMovie.movie_id}`
+			await REDIS_SETEX(cacheKey, 3600, JSON.stringify(newMovie))
+
 			return newMovie
 		} catch (error) {
 			console.error('Error in create:', error.message)
@@ -154,7 +157,8 @@ class movieService {
 				await REDIS_DEL(key)
 			}
 
-			await REDIS_DEL(`movie:${movieId}`)
+			const cacheKey = `movie:${movieId}`
+			await REDIS_SETEX(cacheKey, 3600, JSON.stringify(movie))
 
 			return movie
 		} catch (error) {
