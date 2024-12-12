@@ -9,8 +9,15 @@ class movieController extends BasicController {
 	}
 	async getMovies(req, res) {
 		try {
-			const { search } = req.query
-			const response = await movieService.getMovies({ search, ...req.body })
+			const { search, sort, order, page, limit } = req.query
+
+			const response = await movieService.getMovies({
+				search,
+				sort,
+				order,
+				page: Number(page),
+				limit: Number(limit),
+			})
 			if (!response) {
 				return res.status(404).json({ message: 'Movies not found.' })
 			}
